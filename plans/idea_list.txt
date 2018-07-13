@@ -1,0 +1,11 @@
+Ideas to pesis game:
+- one pelinjohtaja (="coach") controls one team, normally user against AI
+- draw cards to get different kinds of players, hits (serves, others..?) randomly
+- before each serve, team on inside must choose which hit to use, which play call, etc..
+- before each serve, team on outside must choose which play call for positioning, which serve, etc..
+- stochasticity is always in play but player decisions matter a lot on how likely plays succeed
+- players come with certain properties, hits, play calls, serves etc. with certain strenghts and weaknesses
+- players make decision on their own in certain situations to make the game flow faster, the better the player the better decisions are made
+- rough flow of game: draw teams, hutunkeitto to pick starter, play periods acoording to finnish baseball rules
+- players have 4 general skills, 3 inside skills and 3 outside skills
+- players have a general type, inside type and outside type, each tells in which way the corresponding properties are distributed

@@ -1,0 +1,12 @@
+Pesis development todo list:
+
+- objects
+- tests for key parts at least (will grow later)
+- game engine
+- random AI
+- text UI
+- practical testing
+- improve tests
+- GUI
+- share
+
