@@ -9,3 +9,4 @@ Ideas to pesis game:
 - rough flow of game: draw teams, hutunkeitto to pick starter, play periods acoording to finnish baseball rules
 - players have 4 general skills, 3 inside skills and 3 outside skills
 - players have a general type, inside type and outside type, each tells in which way the corresponding properties are distributed
+- field is divided into 12 different sites for hits to be directed at or outside players to be located at (see sites.png)

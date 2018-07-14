@@ -3,6 +3,7 @@ from ..utils import dgv
 class Player:
     def __init__(self, name, level, nu, gen_type, in_type, out_type):
         self.name = name
+        self.status = None
         self.level = level
         self.nu = nu
         self.gen_type = gen_type
@@ -82,7 +83,7 @@ class Player:
 
 
     def __repr__(self):
-        s = self.name + " ("
+        s = self.name + "-" + str(self.status) + " ("
         s += "PS:%-2i"%(self.sk['PS']) + " "
         s += "HN:%-2i"%(self.sk['HN']) + " "
         s += "RH:%-2i"%(self.sk['RH']) + " "
