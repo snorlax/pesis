@@ -14,7 +14,7 @@ class Player:
         in_charac = self.in_characs(in_type)
         self.out_type = out_type
         out_charac = self.out_characs(out_type)
-        self.handedness = 0# sign(dgv(0.5,1))
+        self.handedness = 'right' if dgv(0.5,1) > 0 else 'left'
 
         # skills
         self.sk = {}
@@ -112,4 +112,14 @@ class Player:
         s += "Koppaus:       %2i"%(self.sk['KP']) + "  "
         s += "Heitto:        %2i"%(self.sk['HT']) + "\n"
         return s
+
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
+
+    def skillsum(self):
+        return   self.sk['PS'] + self.sk['HN'] + self.sk['RH'] \
+               + self.sk['KA'] + self.sk['NP'] + self.sk['VM'] \
+               + self.sk['TK'] + self.sk['SY'] + self.sk['KP'] \
+               + self.sk['HT']
+
 

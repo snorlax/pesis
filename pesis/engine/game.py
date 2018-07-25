@@ -1,6 +1,5 @@
 from ..objects import Player
 from ..utils import dgv, prc_choice, rand_pick
-from .actions import hutunkeitto
 
 def draw_players(level_multiplier=1.):
     ps = []; lm = level_multiplier; nu = 2.
@@ -40,6 +39,8 @@ def draw_players(level_multiplier=1.):
     return ps
 
 def game(ui, pj1, pj2):
+
+    # TODO make this much more simply, own functions for jakso, vuoropari, vuoro jne.
     
     # draw players
     pj1_roster = draw_players()
@@ -49,10 +50,10 @@ def game(ui, pj1, pj2):
     pj1_roster = ui.select_players(pj1, pj1_roster)
     pj2_roster = ui.select_players(pj2, pj2_roster)
 
-    # hutunkeitto
+    # hutunkeitto and starter
     hk1 = ui.select_hutunkeittaja(pj1, pj1_roster)
     hk2 = ui.select_hutunkeittaja(pj2, pj2_roster)
-    winner = hutunkeitto(hk1, hk2)
+    winner = hutunkeitto(ui, hk1, hk2)
     if winner == hk1:
         starts_in = ui.select_turn(pj1)
         if starts_in:
