@@ -13,3 +13,10 @@ def cgv(mu, nu, minv=0., maxv=1.):
 
 def rand_pick(l):
     return l[np.random.randint(len(l))]
+
+def prc_choice(p):
+    "Percentage choice"
+    if np.random.rand() <= p:
+        return True
+    else:
+        return False

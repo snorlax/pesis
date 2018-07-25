@@ -1,3 +1,5 @@
+import numpy as np
+
 from ..utils import dgv
 
 class Player:
@@ -12,6 +14,7 @@ class Player:
         in_charac = self.in_characs(in_type)
         self.out_type = out_type
         out_charac = self.out_characs(out_type)
+        self.handedness = 0# sign(dgv(0.5,1))
 
         # skills
         self.sk = {}
