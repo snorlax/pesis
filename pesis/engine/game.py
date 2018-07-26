@@ -1,89 +1,67 @@
-from ..objects import Player
-from ..utils import dgv, prc_choice, rand_pick
+from .create_players import create_players
+from play_action import select_actions, action
 
-def draw_players(level_multiplier=1.):
-    ps = []; lm = level_multiplier; nu = 2.
-    gens = ('perusvarma','tulokas','konkari')
-    ins  = ('lyöjä','etenijä','yleispelaaja')
-    outs = ('koppari','sieppari','polttaja','lukkari')
-    ps.append(Player('Player A', dgv(14,1)*lm, nu, rand_pick(gens),
-                        rand_pick(ins), rand_pick(outs))
-    ps.append(Player('Player B', dgv(14,1)*lm, nu, rand_pick(gens),
-                        rand_pick(ins), rand_pick(outs))
-    ps.append(Player('Player C', dgv(13,1)*lm, nu, rand_pick(gens),
-                        rand_pick(ins), rand_pick(outs))
-    ps.append(Player('Player D', dgv(12,1)*lm, nu, rand_pick(gens),
-                        rand_pick(ins), rand_pick(outs))
-    ps.append(Player('Player E', dgv(12,1)*lm, nu, rand_pick(gens),
-                        rand_pick(ins), rand_pick(outs))
-    ps.append(Player('Player F', dgv(10,1)*lm, nu, rand_pick(gens),
-                        rand_pick(ins), rand_pick(outs))
-    ps.append(Player('Player G', dgv(10,1)*lm, nu, rand_pick(gens),
-                        rand_pick(ins), rand_pick(outs))
-    ps.append(Player('Player H', dgv(10,1)*lm, nu, rand_pick(gens),
-                        rand_pick(ins), rand_pick(outs))
-    ps.append(Player('Player I', dgv(10,1)*lm, nu, rand_pick(gens),
-                        rand_pick(ins), rand_pick(outs))
-    ps.append(Player('Player J', dgv(8,1)*lm, nu, rand_pick(gens),
-                        rand_pick(ins), rand_pick(outs))
-    ps.append(Player('Player K', dgv(8,1)*lm, nu, rand_pick(gens),
-                        rand_pick(ins), rand_pick(outs))
-    ps.append(Player('Player L', dgv(6,1)*lm, nu, rand_pick(gens),
-                        rand_pick(ins), rand_pick(outs))
-    ps.append(Player('Player M', dgv(6,1)*lm, nu, rand_pick(gens),
-                        rand_pick(ins), rand_pick(outs))
-    ps.append(Player('Player N', dgv(4,1)*lm, nu, rand_pick(gens),
-                        rand_pick(ins), rand_pick(outs))
-    ps.append(Player('Player O', dgv(4,1)*lm, nu, rand_pick(gens),
-                        rand_pick(ins), rand_pick(outs))
-    return ps
+def vuoro(ui, ins_pj, out_pj):
+    palot = 0; lyoja = ins_pj.ros.turn(); vl = (lyoja-1)%10
+    juoksut = 0
+    ins_pj.roster.init_ins_turn()
+    out_pj.roster.init_out_turn()
+    while palot < 3:
+        if lyoja == vl:
+            ui.lyojat_ended()
+            break
+        select_actions(ui, ins_pj, out_pj, lyoja)
+        action(ui, ins_pj.ros, out_pj.ros, lyoja, palot, juoksut)
+    ui.three_paloa()
+    return juoksut
+
+def vuoronvaihto(ins_pj, out_pj):
+    return out_pj, ins_pj
 
 def game(ui, pj1, pj2):
+    ui.game_begins()
 
-    # TODO make this much more simply, own functions for jakso, vuoropari, vuoro jne.
-    
-    # draw players
-    pj1_roster = draw_players()
-    pj2_roster = draw_players()
+    # create players, select rosters
+    pj1.ros = ui.select_roster(pj1, create_players())
+    pj2.ros = ui.select_roster(pj2, create_players())
 
-    # select rosters for game
-    pj1_roster = ui.select_players(pj1, pj1_roster)
-    pj2_roster = ui.select_players(pj2, pj2_roster)
-
-    # hutunkeitto and starter
-    hk1 = ui.select_hutunkeittaja(pj1, pj1_roster)
-    hk2 = ui.select_hutunkeittaja(pj2, pj2_roster)
-    winner = hutunkeitto(ui, hk1, hk2)
-    if winner == hk1:
-        starts_in = ui.select_turn(pj1)
-        if starts_in:
-            starter = pj1
-        else:
-            starter = pj2
-    else:
-        starts_in = ui.select_turn(pj2)
-        if starts_in:
-            starter = pj2
-        else:
-            starter = pj1
-
-    # play one game
-    jakso = 1; vp = [1,1]
-    inpj = starter
-    if inpj == pj1: outpj = pj2
-    else: outpj = pj1
+    # set initial values, TODO hutunkeitto
+    ins_pj = pj1; out_pj = pj2
+    jaksovoitot = [0,0]
 
     # play first jakso
-    lyoja1 = 1, lyoja2 = 1
-    while vp[0] <= 4:
-        # play one vuoropari
-        palot = 0
-        while palot < 3:
-            # play one serve
-            
-                
+    jakso = 1; vp = 1; juoksut = [0,0]
+    ui.jakso_begins(jakso)
+    while vp <= 4:
+        ui.vuoropari_begins(vp)
+        juoksut[0] += vuoro(ui, ins_pj, out_pj)
+        ui.vuoronvaihto(ins_pj, out_pj)
+        ins_pj, out_pj = vuoronvaihto(ins_pj, out_pj)
+        juoksut[1] += vuoro(ui, ins_pj, out_pj)
+        ui.vuoronvaihto(ins_pj, out_pj)
+        ins_pj, out_pj = vuoronvaihto(ins_pj, out_pj)
+    if juoksut[0] > juoksut[1]:
+        jaksovoitot[0] += 1
+    elif juoksut[0] < juoksut[1]:
+        jaksovoitot[1] += 1
 
+    # play second jakso
+    jakso = 2; vp = 1; juoksut = [0,0]
+    ui.jakso_begins(jakso)
+    while vp <= 4:
+        ui.vuoropari_begins(vp)
+        juoksut[0] += vuoro(ui, ins_pj, out_pj)
+        ui.vuoronvaihto(ins_pj, out_pj)
+        ins_pj, out_pj = vuoronvaihto(ins_pj, out_pj)
+        juoksut[1] += vuoro(ui, ins_pj, out_pj)
+        ui.vuoronvaihto(ins_pj, out_pj)
+        ins_pj, out_pj = vuoronvaihto(ins_pj, out_pj)
+    if juoksut[0] > juoksut[1]:
+        jaksovoitot[0] += 1
+    elif juoksut[0] < juoksut[1]:
+        jaksovoitot[1] += 1    
 
-
+    # finalize game
+    ui.game_ended
 
 
